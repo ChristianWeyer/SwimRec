@@ -34,6 +34,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Content Include="config.xml" />
+    <Content Include="js\toastr.js" />
     <Content Include="styles\images\icons.png" />
     <Content Include="content\startup.png" />
     <Content Include="content\startup_simple.png" />
@@ -42,7 +43,6 @@
     <Content Include="content\swimrec.png" />
     <Content Include="content\swimrec_small.png" />
     <Content Include="content\swimrec_small_transparent.png" />
-    <Content Include="cordova-1.7.0.js" />
     <Content Include="favicon.ico" />
     <Content Include="favicon.png" />
     <Content Include="index.css" />
@@ -58,7 +58,8 @@
     <Content Include="styles\kendo.mobile.all.min.css" />
     <Content Include="styles\kendo.mobile.android4.min.css" />
     <Content Include="styles\kendo.mobile.ios.min.css" />
-    <Content Include="vsdoc\kendo.mobile-vsdoc.js" />
+    <Content Include="styles\toastr-responsive.css" />
+    <Content Include="styles\toastr.css" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -74,6 +75,7 @@
     <None Include="content\startup_x2.pdn" />
     <None Include="Properties\PublishProfiles\swimrec - FTP.pubxml" />
     <None Include="Properties\PublishProfiles\swimrec - Web Deploy.pubxml" />
+    <None Include="README" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />
