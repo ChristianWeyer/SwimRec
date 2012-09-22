@@ -47,6 +47,10 @@ $(document).ready(function ($) {
 	$('#searchSwimmer').click(function () {
 		searchSwimmers();
 	});
+	
+	toastr.options = {
+        positionClass: 'toast-top-left'
+    };
 });
 
 function showLoader(displayText) {
@@ -93,6 +97,7 @@ function saveFavorite() {
 	currentLocalSwimmerData.Records = currentSwimmerRecords;
 
 	store.save({ key: key, localSwimmer: currentLocalSwimmerData }, function (obj) {
+		toastr.info('Gespeichert.');
 	});
 };
 
