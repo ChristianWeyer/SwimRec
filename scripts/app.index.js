@@ -51,6 +51,8 @@ $(document).ready(function ($) {
 	toastr.options = {
         positionClass: 'toast-top-left'
     };
+    NotifierjsConfig.defaultTimeOut = 1250;
+    NotifierjsConfig.position = ["top", "left"];
 });
 
 function showLoader(displayText) {
@@ -97,7 +99,8 @@ function saveFavorite() {
 	currentLocalSwimmerData.Records = currentSwimmerRecords;
 
 	store.save({ key: key, localSwimmer: currentLocalSwimmerData }, function (obj) {
-		toastr.success(currentSwimmerName, 'Gespeichert.');
+	    //toastr.success(currentSwimmerName, 'Gespeichert.');
+	    Notifier.success(currentSwimmerName, 'Gespeichert.');
 	});
 };
 

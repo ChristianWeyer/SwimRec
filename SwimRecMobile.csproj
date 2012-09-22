@@ -34,6 +34,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Content Include="config.xml" />
+    <Content Include="js\notifier.js" />
     <Content Include="js\toastr.js" />
     <Content Include="styles\images\icons.png" />
     <Content Include="content\startup.png" />
