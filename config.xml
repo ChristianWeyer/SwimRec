@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<widget xmlns="http://www.w3.org/ns/widgets"
+        xmlns:gap="http://phonegap.com/ns/1.0"
+        id="net.christianweyer.swimming"
+        version="0.3.0">
+
+  <name>SwimRec</name>
+  <description>Inoffizielle App für die Schwimmerabfrage (Bestzeiten) des DSV.</description>
+
+  <author href="http://weblogs.thinktecture.com/cweyer"
+          email="christian.weyer@thinktecture.com">Christian Weyer</author>
+
+  <feature name="http://api.phonegap.com/1.0/geolocation"/>
+  <feature name="http://api.phonegap.com/1.0/network"/>
+
+  <preference name="orientation"
+              value="portrait" />
+  <preference name="webviewbounce"
+              value="false" />
+
+  <gap:splash src="content/startup.png"
+              width="320"
+              height="480" />
+  <gap:splash src="content/startup_x2.png"
+              width="640"
+              height="960" />
+  <gap:splash src="content/startup.png"
+              gap:platform="android"
+              gap:density="ldpi" />
+  <gap:splash src="content/startup.png"
+              gap:platform="android"
+              gap:density="mdpi" />
+  <gap:splash src="content/startup.png"
+              gap:platform="android"
+              gap:density="hdpi" />
+</widget>

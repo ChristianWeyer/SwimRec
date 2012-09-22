@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html manifest="cache.manifest">
+<head>
+	<title>SwimRec</title>
+	
+	<meta charset="utf-8">
+	<meta name="apple-mobile-web-app-capable" content="yes" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1.0" />
+	
+	<link rel="icon" type="image/png" href="favicon.png" />
+	<link rel="apple-touch-icon" href="content/swimrec.png" />
+
+	<link rel="apple-touch-startup-image" href="content/startup_web.png" media="screen and (max-device-width: 320px)" />
+
+	<link rel="stylesheet" href="styles/kendo.mobile.all.min.css" />
+	<link rel="stylesheet" href="index.css" />
+	
+	<script type="text/javascript" src="js/jquery.min.js"></script>
+	<script type="text/javascript" src="js/kendo.mobile.min.js"></script>
+	<script type="text/javascript" src="js/underscore.js"></script>
+	<script type="text/javascript" src="js/lawnchair-0.6.1.min.js" ></script>
+	<script type="text/javascript" src="scripts/app.index.js"></script>
+</head>
+<body>	
+	<style scoped>
+		.events
+		{
+			float: left;
+			color: #aaa;
+		}
+		.times
+		{
+			float: right;
+		}
+		#laneSelect
+		{
+			margin: 1em auto .4em auto;
+		}
+
+		.km-android .km-navbar div.km-view-title
+		{
+			display: inline-block;
+		}
+		
+		.km-tablet .km-ios :not(.km-tabstrip):not(.km-buttongroup) .km-button:active
+		{
+			background-color: #444;
+		}
+		
+		.km-modalview,
+		.km-modalview-wrapper:before
+		{
+			display: -webkit-inline-box;
+			height: 100%;
+			vertical-align: middle;
+		}
+
+		.km-modalview-wrapper:before
+		{
+			content: "\a0";
+			width: 0px;
+			display: inline-block;
+		}
+		
+		
+		#devFavsConfirmText,
+		#delFavsYesButton,
+		#delFavsNoButton,
+		#confirmServiceErrorButton,
+		#confirmSwimmerErrorButton {
+			display: block;
+			text-align: center;
+			margin: .6em .8em 0;
+			font-size: 1.2em;
+		}
+		
+		#serverErrorText,
+		#swimmerErrorText {
+			display: block;
+			text-align: center;
+			margin: .6em .8em 0;
+			font-size: 1.5em;
+		}
+
+		.km-ios #confirmClearFavs,
+		.km-ios #serviceErrorDialog,
+		.km-ios #swimmerErrorDialog {
+			height: 240px;
+		}
+
+		.km-ios #confirmClearFavs .km-button,
+		.km-ios #confirmClearFavs .km-header {
+			background-color: #000;
+		}
+
+		.km-ios #confirmClearFavs .km-button:active,
+		.km-ios #confirmClearFavs .km-state-active {
+			background-color: #2e2e2e;
+		}
+
+		.km-ios #confirmClearFavs #delFavsYesButton {
+			background-color: Green;
+		}
+
+		.km-ios #confirmClearFavs #delFavsNoButton,
+		.km-ios #serviceErrorDialog #confirmServiceErrorButton,
+		.km-ios #swimmerErrorDialog #confirmSwimmerErrorButton {
+			background-color: Red;
+		}
+			
+		.km-tablet .km-ios .km-view-title, .km-tablet .km-ios #confirmClearFavs .km-view-title {
+			color: #fff;
+			text-shadow: 0 -1px rgba(0,0,0,.5);
+		}
+	</style>
+
+	<script type="text/x-kendo-template" id="swimmersTemplate">
+		# for (var i = 0; i < data.length; i++) { #
+			<li>
+				<a onClick=searchRecords('${data[i].SwimmerID}',true,true)>${data[i].Firstname + ' ' + data[i].Lastname + ' (' + data[i].BornYear + ') '}</a>
+				<br/>
+				<a onClick=searchRecords('${data[i].SwimmerID}',true,true)><i>${data[i].Club}</i></a>
+				<a data-role="detailbutton" data-icon="search"></a>
+			</li>
+		# } #
+	</script>
+	<script type="text/x-kendo-template" id="resultsTemplate">
+		# for (var i = 0; i < data.length; i++) { #
+			# if(i==0) { #
+			   <li>
+					Freistil
+					<ul>
+			# } #
+		
+			# if(i==7) { #
+					</ul>
+			   </li>
+			   <li>
+					Brust
+					<ul>
+			# } #
+
+			# if(i==11) { #
+					</ul>
+			   </li>
+			   <li>
+					Rücken
+					<ul>
+			# } #
+
+			# if(i==15) { #
+					</ul>
+			   </li>
+			   <li>
+					Schmetterling
+					<ul>
+			# } #
+
+			# if(i==19) { #
+					</ul>
+			   </li>
+			   <li>
+					Lagen
+					<ul>
+			# } #
+
+			# var time = data[i]; #
+			# if(time == "") time = "-"; #
+
+			<li><span class="events">#= events[i] #</span><span class="times">#= time #</span></li>
+		# } #
+	</script>
+	<script type= "text/x-kendo-template" id="favoritesTemplate">
+		# for (var i = 0; i < data.length; i++) { #
+			<li>
+				<a onClick=displayFavorite('${data[i].SwimmerID}')>${data[i].Firstname + ' ' + data[i].Lastname}</a>
+				<a data-role="detailbutton" data-icon="play"></a>
+			</li>
+		# } #
+	</script>
+
+	<div id="searchPage" data-role="view" data-layout="defaultView" data-title="SwimRec">
+		<br />
+		<h2>Personensuche</h2>
+		<br />
+		<ul data-role="listview" data-style="inset">
+			<li>
+				<input type="search" name="swimmerSearch" id="search" value="Britta Steffen" />Name
+			</li>
+			<li>
+				<div>
+					<a id="searchSwimmer" data-role="button" data-icon="search">Suchen</a>
+				</div>
+			</li>
+		</ul>
+	</div>
+
+	<div id="swimmerResultsPage" data-role="view" data-layout="defaultView" data-title="SwimRec">
+		<br />
+		<h2>Gefundene Schwimmer</h2>
+		<ul id="searchResultList" data-role="listview" data-style="inset">
+			<li></li>
+		</ul>
+	</div>
+
+	<div id="recordsResultsPage" data-role="view" data-layout="resultsView" data-title="SwimRec" data-init="resultsViewInit">
+		<ul id="laneSelect" data-role="buttongroup" data-index="0">
+			<li>25m</li>
+			<li>50m</li>
+			<li>Gesamt</li>
+		</ul>
+		
+		<h2 id="currentSwimmerRecords">-</h2>
+
+		<ul id="recordsList25m" data-role="listview" data-style="inset" data-type="group">
+		</ul>
+		<ul id="recordsList50m" data-role="listview" data-style="inset" data-type="group" style="display: none">
+		</ul>
+		<ul id="recordsListTotal" data-role="listview" data-style="inset" data-type="group" style="display: none">
+		</ul>
+	</div>	
+
+	<div id="favoritesPage" data-role="view" data-layout="favoritesView" data-title="SwimRec" data-show="loadFavorites">
+		<br />
+		<h2>Favoriten</h2>
+		<ul id="favoritesSwimmer" data-role="listview" data-style="inset">
+			<li></li>
+		</ul>
+	</div>
+
+	<div id="settingsPage" data-role="view" data-layout="defaultView" data-title="SwimRec">
+		<br />
+		<h2>Einstellungen</h2>
+		<ul data-role="listview" data-style="inset">
+			<li>
+				<a id="deleteFavs" data-role="button" href="#confirmClearFavs" data-rel="modalview">Favoriten löschen</a>
+				<a data-role="detailbutton" data-icon="trash"></a>
+			</li>
+		</ul>
+
+		<div data-role="modalview" id="confirmClearFavs" style="width: 280px">
+			<div data-role="header">
+				<div data-role="navbar">
+					<a data-align="right" data-role="button" data-click="closeModalView">X</a>
+				</div>
+			</div>
+
+			<ul data-role="listview" id="devFavsConfirmText">
+				<li>Favoriten wirklich löschen?</li>
+			</ul>
+			
+			<p>
+				<a data-role="button" type="button" id="delFavsYesButton" data-click="clearFavoritesFromModalView">Ja</a>
+				<a data-role="button" type="button" id="delFavsNoButton" data-click="closeModalView">Nein</a>            
+			</p>
+		</div>        
+	</div>
+
+	<div id="infoPage" data-role="view" data-layout="defaultView" data-title="SwimRec">
+		<div>
+			<br />
+			<h2>Über Schwimmerabfrage (SwimRec)</h2>
+			
+			<ul data-role="listview" data-style="inset">
+				<li>
+					Version 0.3 (2012-07-18.2)<img alt="SwimRec" class="times" src="content/swimrec_small.png" />
+				</li>
+				<li>
+					<a href="mailto:cw@thinktecture.com?Subject=Frage zu SwimRec 0.3 (2012-07-18.2)" data-rel="external">Christian Weyer</a>
+					<a data-role="detailbutton" data-icon="compose"></a>
+				</li>
+			</ul>      			
+		</div>
+	</div>
+
+	<div data-role="layout" data-id="defaultView" data-title="SwimRec">
+		<header data-role="header">
+			<div data-role="navbar">
+				<span data-role="view-title"></span>
+			</div>
+		</header>
+		<footer data-role="footer">
+			<div data-role="tabstrip">
+				<a data-icon="search" href="#searchPage">Suche</a>
+				<a data-icon="favorites" href="#favoritesPage">Favoriten</a>
+				<a data-icon="settings" href="#settingsPage">Einstellungen</a>
+				<a data-icon="info" href="#infoPage">Info</a>
+			</div>
+		</footer>
+	</div>	
+	<div data-role="layout" data-id="resultsView" data-title="SwimRec">
+		<header data-role="header">
+			<div data-role="navbar" id="resultsViewNavBar">
+				<span data-role="view-title"></span>
+				<a data-align="right" data-role="button" class="nav-button" data-icon="toprated" id="addFavorite"></a>
+			</div>
+		</header>
+		<footer data-role="footer">
+			<div data-role="tabstrip">
+				<a data-icon="search" href="#searchPage">Suche</a> 
+				<a data-icon="favorites" href="#favoritesPage">Favoriten</a> 
+				<a data-icon="settings" href="#settingsPage">Einstellungen</a>
+				<a data-icon="info" href="#infoPage">Info</a>
+			</div>
+		</footer>
+	</div>
+	<div data-role="layout" data-id="favoritesView" data-title="SwimRec">
+		<header data-role="header">
+			<div data-role="navbar">
+				<span data-role="view-title"></span>
+				<a data-align="right" data-role="button" class="nav-button" data-icon="refresh" id="refreshFavs"></a>
+			</div>
+		</header>
+		<footer data-role="footer">
+			<div data-role="tabstrip">
+				<a data-icon="search" href="#searchPage">Suche</a> 
+				<a data-icon="favorites" href="#favoritesPage">Favoriten</a> 
+				<a data-icon="settings" href="#settingsPage">Einstellungen</a>
+				<a data-icon="info" href="#infoPage">Info</a>
+			</div>
+		</footer>
+	</div>
+	
+	<!-- global modal views -->
+	<div data-role="modalview" id="serviceErrorDialog" style="width: 280px">
+		<div data-role="header">
+			<div data-role="navbar">
+				<a data-align="right" data-role="button" data-click="closeModalView">X</a>
+			</div>
+		</div>
+
+		<ul data-role="listview"  id="serverErrorText">
+			<li>Fehler beim Server-Aufruf</li>
+		</ul>
+			
+		<p>
+			<a data-role="button" type="button" id="confirmServiceErrorButton" data-click="closeModalView">OK</a>            
+		</p>
+	</div>        
+
+	<div data-role="modalview" id="swimmerErrorDialog" style="width: 280px">
+		<div data-role="header">
+			<div data-role="navbar">
+				<a data-align="right" data-role="button" data-click="closeModalView">X</a>
+			</div>
+		</div>
+
+		<ul data-role="listview"  id="swimmerErrorText">
+			<li>Schwimmer nicht gefunden.</li>
+		</ul>
+			
+		<p>
+			<a data-role="button" type="button" id="confirmSwimmerErrorButton" data-click="closeModalView">OK</a>            
+		</p>
+	</div>        
+
+
+	<script type="text/javascript">
+		//window.kendoMobileApplication = new kendo.mobile.Application(document.body);
+		//kendo.mobile.init(window.kendoMobileApplication.element.children(".km-modalview"));  
+		
+		window.kendoMobileApplication = new kendo.mobile.Application(document.body);
+		var modalElement = window.kendoMobileApplication.element.children("[data-role=modalview]");
+		kendo.mobile.init(modalElement);
+	</script>
+</body>
+</html>
