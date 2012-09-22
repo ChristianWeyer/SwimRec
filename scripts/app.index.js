@@ -215,12 +215,12 @@ function searchSwimmers() {
 				return;
 			}
 
-			if (foundSwimmers.length > 1) {
-				hideLoader();
-
+			if (foundSwimmers.length > 1) {				
 				var kendoTemplate = kendo.template($("#swimmersTemplate").text());
 				$("#searchResultList").html(kendoTemplate(foundSwimmers));
 				kendo.mobile.init($("#searchResultList"));
+
+				hideLoader();
 
 				window.kendoMobileApplication.navigate("#swimmerResultsPage");
 			}
@@ -249,9 +249,7 @@ function searchRecords(swimmerId, loader, display) {
 			showDialog('serviceErrorDialog');
 			//alert('Server kann nicht erreicht werden.');
 		},
-		success: function (serverData) {
-			hideLoader();
-
+		success: function (serverData) {			
 			currentSwimmer = _.find(foundSwimmers, function (n) { return n.SwimmerID == swimmerId; });
 			currentSwimmerRecords = serverData;
 
@@ -260,7 +258,9 @@ function searchRecords(swimmerId, loader, display) {
 
 				bindSwimmer(currentSwimmerRecords);
 				bindRecordsTables(currentSwimmerRecords);
-			}
+            }
+
+            hideLoader();
 		}
 	});
 };
