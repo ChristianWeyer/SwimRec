@@ -97,7 +97,7 @@ function saveFavorite() {
 	currentLocalSwimmerData.Records = currentSwimmerRecords;
 
 	store.save({ key: key, localSwimmer: currentLocalSwimmerData }, function (obj) {
-		toastr.success('Gespeichert.');
+		toastr.success(currentSwimmerName, 'Gespeichert.');
 	});
 };
 
