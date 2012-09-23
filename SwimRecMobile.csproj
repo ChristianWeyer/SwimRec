@@ -34,8 +34,39 @@
   </PropertyGroup>
   <ItemGroup>
     <Content Include="config.xml" />
-    <Content Include="js\notifier.js" />
-    <Content Include="js\toastr.js" />
+    <Content Include="index.min.css">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>index.css</DependentUpon>
+    </Content>
+    <Content Include="js\notifier.js">
+      <Generator>GoogleClosureCompiler</Generator>
+      <LastGenOutput>notifier.min.js</LastGenOutput>
+    </Content>
+    <Content Include="js\notifier.min.js">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>notifier.js</DependentUpon>
+    </Content>
+    <Content Include="js\toastr.js">
+      <Generator>GoogleClosureCompiler</Generator>
+      <LastGenOutput>toastr.min.js</LastGenOutput>
+    </Content>
+    <Content Include="js\toastr.min.js">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>toastr.js</DependentUpon>
+    </Content>
+    <Content Include="js\underscore.min.js">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>underscore.js</DependentUpon>
+    </Content>
+    <Content Include="scripts\app.index.min.js">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>app.index.js</DependentUpon>
+    </Content>
     <Content Include="styles\images\icons.png" />
     <Content Include="content\startup.png" />
     <Content Include="content\startup_simple.png" />
@@ -46,21 +77,46 @@
     <Content Include="content\swimrec_small_transparent.png" />
     <Content Include="favicon.ico" />
     <Content Include="favicon.png" />
-    <Content Include="index.css" />
+    <Content Include="index.css">
+      <Generator>YUICompressor</Generator>
+      <LastGenOutput>index.min.css</LastGenOutput>
+    </Content>
     <Content Include="index.html" />
     <Content Include="js\jquery.min.js" />
     <Content Include="js\kendo.mobile.min.js" />
     <Content Include="js\lawnchair-0.6.1.min.js" />
-    <Content Include="js\underscore.js" />
-    <Content Include="scripts\app.index.js" />
+    <Content Include="js\underscore.js">
+      <Generator>GoogleClosureCompiler</Generator>
+      <LastGenOutput>underscore.min.js</LastGenOutput>
+    </Content>
+    <Content Include="scripts\app.index.js">
+      <Generator>GoogleClosureCompiler</Generator>
+      <LastGenOutput>app.index.min.js</LastGenOutput>
+    </Content>
     <Content Include="styles\images\android-sprite.png" />
     <Content Include="styles\images\iconmasks.svg" />
     <Content Include="styles\images\ios-sprite.png" />
     <Content Include="styles\kendo.mobile.all.min.css" />
     <Content Include="styles\kendo.mobile.android4.min.css" />
     <Content Include="styles\kendo.mobile.ios.min.css" />
-    <Content Include="styles\toastr-responsive.css" />
-    <Content Include="styles\toastr.css" />
+    <Content Include="styles\toastr-responsive.css">
+      <Generator>YUICompressor</Generator>
+      <LastGenOutput>toastr-responsive.min.css</LastGenOutput>
+    </Content>
+    <Content Include="styles\toastr-responsive.min.css">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>toastr-responsive.css</DependentUpon>
+    </Content>
+    <Content Include="styles\toastr.css">
+      <Generator>YUICompressor</Generator>
+      <LastGenOutput>toastr.min.css</LastGenOutput>
+    </Content>
+    <Content Include="styles\toastr.min.css">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>toastr.css</DependentUpon>
+    </Content>
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
