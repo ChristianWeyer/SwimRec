@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html manifest="cache.manifest">
+<!--<html manifest="cache.manifest">-->
+<html>
 <head>
 	<title>SwimRec</title>
 	
@@ -27,6 +28,13 @@
 </head>
 <body>	
 	<style scoped>
+	    .clubIcon
+	    { 
+            text-align: center;
+            margin-bottom: 0.6em;
+            margin-top: 0.65em;
+            margin-left: 5px
+        }
 		.events
 		{
 			float: left;
@@ -281,6 +289,7 @@
 		<header data-role="header">
 			<div data-role="navbar">
 				<span data-role="view-title"></span>
+                <img data-align="left" src="content/svw05.png" class="clubIcon" />
 			</div>
 		</header>
 		<footer data-role="footer">
@@ -296,6 +305,7 @@
 		<header data-role="header">
 			<div data-role="navbar" id="resultsViewNavBar">
 				<span data-role="view-title"></span>
+                <img data-align="left" src="content/svw05.png" class="clubIcon" />
 				<a data-align="right" data-role="button" class="nav-button" data-icon="toprated" id="addFavorite"></a>
 			</div>
 		</header>
@@ -312,6 +322,7 @@
 		<header data-role="header">
 			<div data-role="navbar">
 				<span data-role="view-title"></span>
+                <img data-align="left" src="content/svw05.png" class="clubIcon" />
 				<a data-align="right" data-role="button" class="nav-button" data-icon="refresh" id="refreshFavs"></a>
 			</div>
 		</header>

@@ -34,6 +34,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Content Include="config.xml" />
+    <Content Include="content\svw05.png" />
     <Content Include="index.min.css">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
