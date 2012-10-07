@@ -167,7 +167,6 @@ function refreshFavoritesRecordsCore() {
 				cache: false,
 				type: "GET",
 				processData: false,
-				contentType: "application/json; charset=utf-8",
 				error: function (data) {
 					hideLoader();
 					alert(data);
@@ -197,40 +196,43 @@ function searchSwimmers() {
 	var url = swimmersUrl.replace('{0}', firstName).replace('{1}', lastName);
 
 	$.ajax({
-		url: url,
-		cache: false,
-		type: "GET",
-		dataType: "json",
-		contentType: "application/json; charset=utf-8",
-		error: function (data) {
-			hideLoader();
-			showDialog('serviceErrorDialog');
-			//alert('Server kann nicht erreicht werden.');
-		},
-		success: function (serverData) {
-			foundSwimmers = serverData;
-			currentSwimmerName = firstName + ' ' + lastName;
+	    url: url,
+	    cache: false,
+	    type: "GET",
+	    dataType: "json",
+	    error: function (xhr, err) {
+	        hideLoader();
+	        showDialog('serviceErrorDialog');
 
-			if (foundSwimmers == null || foundSwimmers == "") {
-				showDialog('swimmerErrorDialog');
-				hideLoader();
-				//alert("Schwimmer nicht gefunden.");
-				return;
-			}
+	        console.log(JSON.stringify(xhr));
+	        console.log(JSON.stringify(err));
+	    },
+	    success: function (serverData) {
+	        console.log(JSON.stringify(serverData));
 
-			if (foundSwimmers.length > 1) {				
-				var kendoTemplate = kendo.template($("#swimmersTemplate").text());
-				$("#searchResultList").html(kendoTemplate(foundSwimmers));
-				kendo.mobile.init($("#searchResultList"));
+	        foundSwimmers = serverData;
+	        currentSwimmerName = firstName + ' ' + lastName;
 
-				hideLoader();
+	        if (foundSwimmers == null || foundSwimmers == "") {
+	            showDialog('swimmerErrorDialog');
+	            hideLoader();
+	            //alert("Schwimmer nicht gefunden.");
+	            return;
+	        }
 
-				window.kendoMobileApplication.navigate("#swimmerResultsPage");
-			}
-			else {
-				searchRecords(foundSwimmers[0].SwimmerID, false, true);
-			}
-		}
+	        if (foundSwimmers.length > 1) {
+	            var kendoTemplate = kendo.template($("#swimmersTemplate").text());
+	            $("#searchResultList").html(kendoTemplate(foundSwimmers));
+	            kendo.mobile.init($("#searchResultList"));
+
+	            hideLoader();
+
+	            window.kendoMobileApplication.navigate("#swimmerResultsPage");
+	        }
+	        else {
+	            searchRecords(foundSwimmers[0].SwimmerID, false, true);
+	        }
+	    }
 	});
 };
 
@@ -246,7 +248,6 @@ function searchRecords(swimmerId, loader, display) {
 		cache: false,
 		type: "GET",
 		processData: false,
-		contentType: "application/json; charset=utf-8",
 		error: function (data) {
 			hideLoader();
 			showDialog('serviceErrorDialog');
